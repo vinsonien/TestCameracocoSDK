@@ -197,14 +197,24 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             @Override
             public void takePictures() {
                 mSwitchCamera.setVisibility(INVISIBLE);
-                mFlashLamp.setVisibility(INVISIBLE);
+                if (isEnableFlash()){
+                    mFlashLamp.setVisibility(VISIBLE);
+                }else{
+                    mFlashLamp.setVisibility(GONE);
+                }
+//                mFlashLamp.setVisibility(INVISIBLE);
                 machine.capture();
             }
 
             @Override
             public void recordStart() {
                 mSwitchCamera.setVisibility(INVISIBLE);
-                mFlashLamp.setVisibility(INVISIBLE);
+                if (isEnableFlash()){
+                    mFlashLamp.setVisibility(VISIBLE);
+                }else{
+                    mFlashLamp.setVisibility(GONE);
+                }
+//                mFlashLamp.setVisibility(INVISIBLE);
                 machine.record(mVideoView.getHolder().getSurface(), screenProp);
             }
 
@@ -212,7 +222,11 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             public void recordShort(final long time) {
                 mCaptureLayout.setTextWithAnimation("录制时间过短");
                 mSwitchCamera.setVisibility(VISIBLE);
-                mFlashLamp.setVisibility(VISIBLE);
+                if (isEnableFlash()){
+                    mFlashLamp.setVisibility(VISIBLE);
+                }else{
+                    mFlashLamp.setVisibility(GONE);
+                }
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -451,7 +465,11 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 break;
         }
         mSwitchCamera.setVisibility(VISIBLE);
-        mFlashLamp.setVisibility(VISIBLE);
+        if (isEnableFlash()){
+            mFlashLamp.setVisibility(VISIBLE);
+        }else{
+            mFlashLamp.setVisibility(GONE);
+        }
         mCaptureLayout.resetCaptureLayout();
     }
 
@@ -609,5 +627,16 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                 machine.flash(Camera.Parameters.FLASH_MODE_OFF);
                 break;
         }
+    }
+
+    //闪光灯是否隐藏
+    private boolean enableFlash = true;
+
+    public boolean isEnableFlash() {
+        return enableFlash;
+    }
+
+    public void setEnableFlash(boolean enableFlash) {
+        this.enableFlash = enableFlash;
     }
 }
